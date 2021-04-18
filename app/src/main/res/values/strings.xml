@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">LifeTrack</string>
+
+    <string name="title">Set a title</string>
+    <string name="question">Set a question</string>
+
+    <string name="answer">Set a the type of answer:</string>
+    <string name="zinco">Zinco</string>
+    <string name="observations">Observations</string>
+
+    <string name="channelname">TrackLife</string>
+    <string name="channeldescription">Here you receive the questions for the data you want to collect.</string>
+
+
+    <string-array name="answer_options">
+        <item>Yes/No</item>
+        <item>Numeric</item>
+        <item>Single word</item>
+        <item>Some words</item>
+        <item>Value in a scale</item>
+        <item>Create a custom answer...</item>
+    </string-array>
+
+</resources>
