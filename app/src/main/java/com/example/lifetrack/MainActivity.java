@@ -26,6 +26,7 @@ import java.util.LinkedList;
 
 
 public class MainActivity extends AppCompatActivity {
+
     private NotificationManager mNotificationManager;
     private static final int NOTIFICATION_ID = 0;
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
@@ -35,15 +36,15 @@ public class MainActivity extends AppCompatActivity {
 
     private final LinkedList<String> mWordList = new LinkedList<>();
 
+    private static final int REQUEST_EDIT = 1234;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        for (int i=0; i<10; i++) {
-            mWordList.addLast("Word " + i);
-        }
+        mWordList.addLast("Example");
 
         createNotificationChannel();
 
@@ -85,21 +86,20 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        FloatingActionButton AddItem = findViewById(R.id.additem);
-        AddItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int wordListSize = mWordList.size();
-                // Add a new word to the wordList.
-                mWordList.addLast("+ Word " + wordListSize);
-                // Notify the adapter, that the data has changed.
-                mRecyclerView.getAdapter().notifyItemInserted(wordListSize);
-                // Scroll to the bottom.
-                mRecyclerView.smoothScrollToPosition(wordListSize);
-            }
-        });
+    }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_EDIT && resultCode == RESULT_OK) {
+            int wordListSize = mWordList.size();
+            // Add a new word to the wordList.
+            mWordList.addLast(data.getData().toString()+ wordListSize);
+            // Notify the adapter, that the data has changed.
+            mRecyclerView.getAdapter().notifyItemInserted(wordListSize);
+            // Scroll to the bottom.
+            mRecyclerView.smoothScrollToPosition(wordListSize);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public void createNotificationChannel() {
@@ -115,6 +115,11 @@ public class MainActivity extends AppCompatActivity {
 
             mNotificationManager.createNotificationChannel(notificationChannel);
         }
+    }
+
+    public void goNewObs(View v) {
+        Intent intentNewObs = new Intent(this, NewObsActivity.class);
+        startActivityForResult(intentNewObs, REQUEST_EDIT);
     }
 
 }

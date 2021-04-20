@@ -57,9 +57,10 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:src="@drawable/ic_add_for_fab"
-        android:id="@+id/additem"
+        android:id="@+id/NewObs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="goNewObs"
         android:layout_gravity="center"
         />
 
