@@ -12,18 +12,20 @@
     <string name="channeldescription">Here you receive the questions for the data you want to collect.</string>
 
 
-    <string-array name="answer_options">
-        <item>Yes/No</item>
-        <item>Numeric</item>
-        <item>Single word</item>
-        <item>Some words</item>
-        <item>Value in a scale</item>
-        <item>Create a custom answer...</item>
-    </string-array>
     <string name="title_activity_display_obs">FullscreenActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="current_observations">Current Observations</string>
     <string name="add_observation">Add Observation</string>
+    <string name="create_new_observation">Create new observation</string>
+    <string name="name_of_the_observation">Name of the observation</string>
+    <string name="data_type">Data type</string>
+
+    <string-array name="datatype_array">
+        <item>Real number</item>
+        <item>0,1,2,...</item>
+        <item>Yes/No</item>
+    </string-array>
+
 
 </resources>
