@@ -47,7 +47,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
             <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/fragment_CreateObs_spinner"
+                android:id="@+id/fragment_CreateObs_datatypespinner"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.6"/>
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="0.4"
-                android:text="Alarm Time"
+                android:text="@string/notification_time"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
@@ -83,22 +83,12 @@
 
         </LinearLayout>
 
-        <CheckBox
-            android:id="@+id/fragment_createalarm_recurring"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="false"
-            android:text="Recurring Alarm"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_newobs_timePickerLayout" />
-
         <LinearLayout
             android:id="@+id/fragment_createalarm_recurring_options"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_createalarm_recurring">
+            app:layout_constraintTop_toBottomOf="@+id/fragment_newobs_timePickerLayout">
 
             <CheckBox
                 android:id="@+id/fragment_createalarm_checkMon"
@@ -149,7 +139,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Schedule Alarm"
+            android:text="@string/add_observation"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:layout_editor_absoluteX="133dp" />
 

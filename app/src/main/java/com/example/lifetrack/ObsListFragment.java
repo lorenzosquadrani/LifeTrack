@@ -21,7 +21,7 @@ import androidx.navigation.Navigation;
 import java.util.List;
 
 public class ObsListFragment extends Fragment implements OnToggleAlarmListener {
-    private AlarmRecyclerViewAdapter alarmRecyclerViewAdapter;
+    private ObsRecyclerViewAdapter obsRecyclerViewAdapter;
     private AlarmsListViewModel alarmsListViewModel;
     private RecyclerView alarmsRecyclerView;
 
@@ -29,26 +29,26 @@ public class ObsListFragment extends Fragment implements OnToggleAlarmListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        alarmRecyclerViewAdapter = new AlarmRecyclerViewAdapter(this);
+        obsRecyclerViewAdapter = new ObsRecyclerViewAdapter(this);
+
         alarmsListViewModel = ViewModelProviders.of(this).get(AlarmsListViewModel.class);
-        alarmsListViewModel.getAlarmsLiveData().observe(this, new Observer<List<Alarm>>() {
-            @Override
-            public void onChanged(List<Alarm> alarms) {
-                if (alarms != null) {
-                    alarmRecyclerViewAdapter.setAlarms(alarms);
-                }
+        alarmsListViewModel.getAlarmsLiveData().observe(this, observations -> {
+            if (observations != null) {
+                obsRecyclerViewAdapter.setObs(observations);
             }
         });
+
     }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
+    {
         View view = inflater.inflate(R.layout.fragment_obs_list, container, false);
 
         alarmsRecyclerView = view.findViewById(R.id.fragment_listobs_recylerView);
         alarmsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        alarmsRecyclerView.setAdapter(alarmRecyclerViewAdapter);
+        alarmsRecyclerView.setAdapter(obsRecyclerViewAdapter);
 
         Button AddObs = view.findViewById(R.id.fragment_ObsList_CreateObs);
         AddObs.setOnClickListener(
@@ -60,13 +60,13 @@ public class ObsListFragment extends Fragment implements OnToggleAlarmListener {
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
-    public void onToggle(Alarm alarm) {
-        if (alarm.isStarted()) {
-            alarm.cancelAlarm(getContext());
-            alarmsListViewModel.update(alarm);
-        } else {
-            alarm.schedule(getContext());
-            alarmsListViewModel.update(alarm);
+    public void onToggle(Observation observation) {
+        if (observation.isStarted()) {
+            observation.cancelAlarm(getContext());
         }
+        else {
+            observation.schedule(getContext());
+        }
+        alarmsListViewModel.update(observation);
     }
 }

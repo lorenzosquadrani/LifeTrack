@@ -5,16 +5,16 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
-public class CreateAlarmViewModel extends AndroidViewModel {
+public class CreateObsViewModel extends AndroidViewModel {
     private AlarmRepository alarmRepository;
 
-    public CreateAlarmViewModel(@NonNull Application application) {
+    public CreateObsViewModel(@NonNull Application application) {
         super(application);
 
         alarmRepository = new AlarmRepository(application);
     }
 
-    public void insert(Alarm alarm) {
-        alarmRepository.insert(alarm);
+    public void insert(Observation observation) {
+        alarmRepository.insert(observation);
     }
 }

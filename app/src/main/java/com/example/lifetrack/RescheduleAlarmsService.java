@@ -9,8 +9,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
-import com.example.lifetrack.Alarm;
-import com.example.lifetrack.AlarmRepository;
 
 import java.util.List;
 
@@ -29,11 +27,11 @@ public class RescheduleAlarmsService extends Service {
 
         AlarmRepository alarmRepository = new AlarmRepository(getApplication());
 
-        alarmRepository.getAlarmsLiveData().observe((LifecycleOwner) this, new Observer<List<Alarm>>() {
+        alarmRepository.getAlarmsLiveData().observe((LifecycleOwner) this, new Observer<List<Observation>>() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
-            public void onChanged(List<Alarm> alarms) {
-                for (Alarm a : alarms) {
+            public void onChanged(List<Observation> observations) {
+                for (Observation a : observations) {
                     if (a.isStarted()) {
                         a.schedule(getApplicationContext());
                     }

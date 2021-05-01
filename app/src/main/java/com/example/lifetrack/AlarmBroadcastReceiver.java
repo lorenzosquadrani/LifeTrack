@@ -1,24 +1,12 @@
 package com.example.lifetrack;
 
-import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Build;
-import android.util.Log;
 import android.widget.Toast;
 
-import androidx.lifecycle.Observer;
-
-import com.example.lifetrack.Alarm;
-import com.example.lifetrack.AlarmRepository;
-import com.example.lifetrack.AlarmService;
-import com.example.lifetrack.RescheduleAlarmsService;
-
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 public class AlarmBroadcastReceiver extends BroadcastReceiver {
     public static final String MONDAY = "MONDAY";

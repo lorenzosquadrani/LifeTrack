@@ -11,14 +11,14 @@ import java.util.List;
 @Dao
 public interface AlarmDao {
     @Insert
-    void insert(Alarm alarm);
+    void insert(Observation observation);
 
-    @Query("DELETE FROM alarm_table")
+    @Query("DELETE FROM obs_table")
     void deleteAll();
 
-    @Query("SELECT * FROM alarm_table ORDER BY alarmId ASC")
-    LiveData<List<Alarm>> getAlarms();
+    @Query("SELECT * FROM obs_table ORDER BY ObsId ASC")
+    LiveData<List<Observation>> getAlarms();
 
     @Update
-    void update(Alarm alarm);
+    void update(Observation observation);
 }

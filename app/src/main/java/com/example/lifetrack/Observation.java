@@ -13,9 +13,6 @@ import androidx.annotation.RequiresApi;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import com.example.lifetrack.AlarmBroadcastReceiver;
-import com.example.lifetrack.DayUtil;
-
 import java.util.Calendar;
 
 import static com.example.lifetrack.AlarmBroadcastReceiver.FRIDAY;
@@ -28,26 +25,28 @@ import static com.example.lifetrack.AlarmBroadcastReceiver.TITLE;
 import static com.example.lifetrack.AlarmBroadcastReceiver.TUESDAY;
 import static com.example.lifetrack.AlarmBroadcastReceiver.WEDNESDAY;
 
-@Entity(tableName = "alarm_table")
-public class Alarm {
+@Entity(tableName = "obs_table")
+public class Observation {
     @PrimaryKey
     @NonNull
-    private int alarmId;
+    private int ObsId;
+
+    private String name;
+    private int datatype;
 
     private int hour, minute;
-    private boolean started, recurring;
+    private boolean started;
     private boolean monday, tuesday, wednesday, thursday, friday, saturday, sunday;
-    private String title;
 
     private long created;
 
-    public Alarm(int alarmId, int hour, int minute, String title, long created, boolean started, boolean recurring, boolean monday, boolean tuesday, boolean wednesday, boolean thursday, boolean friday, boolean saturday, boolean sunday) {
-        this.alarmId = alarmId;
+    public Observation(int ObsId, int hour, int minute, String name, long created,
+                       boolean started, boolean monday, boolean tuesday,
+                       boolean wednesday, boolean thursday, boolean friday, boolean saturday, boolean sunday, int datatype) {
+        this.ObsId = ObsId;
         this.hour = hour;
         this.minute = minute;
         this.started = started;
-
-        this.recurring = recurring;
 
         this.monday = monday;
         this.tuesday = tuesday;
@@ -57,61 +56,51 @@ public class Alarm {
         this.saturday = saturday;
         this.sunday = sunday;
 
-        this.title = title;
+        this.name = name;
+        this.datatype = datatype;
 
         this.created = created;
+
     }
 
     public int getHour() {
         return hour;
     }
-
     public int getMinute() {
         return minute;
     }
-
+    public int getDatatype() { return datatype; }
     public boolean isStarted() {
         return started;
     }
-
-    public int getAlarmId() {
-        return alarmId;
-    }
-
-    public void setAlarmId(int alarmId) {
-        this.alarmId = alarmId;
-    }
-
-    public boolean isRecurring() {
-        return recurring;
+    public int getObsId() {
+        return ObsId;
     }
 
     public boolean isMonday() {
         return monday;
     }
-
     public boolean isTuesday() {
         return tuesday;
     }
-
     public boolean isWednesday() {
         return wednesday;
     }
-
     public boolean isThursday() {
         return thursday;
     }
-
     public boolean isFriday() {
         return friday;
     }
-
     public boolean isSaturday() {
         return saturday;
     }
-
     public boolean isSunday() {
         return sunday;
+    }
+
+    public void setObsId(int obsId) {
+        this.ObsId = obsId;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -119,7 +108,6 @@ public class Alarm {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
-        intent.putExtra(RECURRING, recurring);
         intent.putExtra(MONDAY, monday);
         intent.putExtra(TUESDAY, tuesday);
         intent.putExtra(WEDNESDAY, wednesday);
@@ -128,9 +116,9 @@ public class Alarm {
         intent.putExtra(SATURDAY, saturday);
         intent.putExtra(SUNDAY, sunday);
 
-        intent.putExtra(TITLE, title);
+        intent.putExtra(TITLE, name);
 
-        PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(context, alarmId, intent, 0);
+        PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(context, ObsId, intent, 0);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
@@ -144,32 +132,17 @@ public class Alarm {
             calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1);
         }
 
-        if (!recurring) {
-            String toastText = null;
-            try {
-                toastText = String.format("One Time Alarm %s scheduled for %s at %02d:%02d", title, DayUtil.toDay(calendar.get(Calendar.DAY_OF_WEEK)), hour, minute, alarmId);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            Toast.makeText(context, toastText, Toast.LENGTH_LONG).show();
 
-            alarmManager.setExact(
-                    AlarmManager.RTC_WAKEUP,
-                    calendar.getTimeInMillis(),
-                    alarmPendingIntent
-            );
-        } else {
-            String toastText = String.format("Recurring Alarm %s scheduled for %s at %02d:%02d", title, getRecurringDaysText(), hour, minute, alarmId);
-            Toast.makeText(context, toastText, Toast.LENGTH_LONG).show();
+        String toastText = String.format("Recurring Alarm %s scheduled for %s at %02d:%02d", name, getRecurringDaysText(), hour, minute, ObsId);
+        Toast.makeText(context, toastText, Toast.LENGTH_LONG).show();
 
-            final long RUN_DAILY = 24 * 60 * 60 * 1000;
-            alarmManager.setRepeating(
-                    AlarmManager.RTC_WAKEUP,
-                    calendar.getTimeInMillis(),
-                    RUN_DAILY,
-                    alarmPendingIntent
-            );
-        }
+        final long RUN_DAILY = 24 * 60 * 60 * 1000;
+        alarmManager.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                calendar.getTimeInMillis(),
+                RUN_DAILY,
+                alarmPendingIntent);
+
 
         this.started = true;
     }
@@ -177,20 +150,16 @@ public class Alarm {
     public void cancelAlarm(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
-        PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(context, alarmId, intent, 0);
+        PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(context, ObsId, intent, 0);
         alarmManager.cancel(alarmPendingIntent);
         this.started = false;
 
-        String toastText = String.format("Alarm cancelled for %02d:%02d with id %d", hour, minute, alarmId);
+        String toastText = String.format("Alarm cancelled for %02d:%02d with id %d", hour, minute, ObsId);
         Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show();
         Log.i("cancel", toastText);
     }
 
     public String getRecurringDaysText() {
-        if (!recurring) {
-            return null;
-        }
-
         String days = "";
         if (monday) {
             days += "Mo ";
@@ -217,8 +186,8 @@ public class Alarm {
         return days;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
     public long getCreated() {

@@ -10,7 +10,7 @@ import java.util.List;
 
 public class AlarmsListViewModel extends AndroidViewModel {
     private AlarmRepository alarmRepository;
-    private LiveData<List<Alarm>> alarmsLiveData;
+    private LiveData<List<Observation>> alarmsLiveData;
 
     public AlarmsListViewModel(@NonNull Application application) {
         super(application);
@@ -19,11 +19,11 @@ public class AlarmsListViewModel extends AndroidViewModel {
         alarmsLiveData = alarmRepository.getAlarmsLiveData();
     }
 
-    public void update(Alarm alarm) {
-        alarmRepository.update(alarm);
+    public void update(Observation observation) {
+        alarmRepository.update(observation);
     }
 
-    public LiveData<List<Alarm>> getAlarmsLiveData() {
+    public LiveData<List<Observation>> getAlarmsLiveData() {
         return alarmsLiveData;
     }
 }

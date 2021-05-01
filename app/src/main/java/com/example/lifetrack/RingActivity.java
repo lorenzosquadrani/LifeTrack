@@ -21,6 +21,7 @@ public class RingActivity extends AppCompatActivity {
     Button snooze;
     ImageView clock;
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,46 +31,39 @@ public class RingActivity extends AppCompatActivity {
         snooze = findViewById(R.id.activity_ring_snooze);
         clock = findViewById(R.id.activity_ring_clock);
 
-        dismiss.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentService = new Intent(getApplicationContext(), AlarmService.class);
-                getApplicationContext().stopService(intentService);
-                finish();
-            }
+        dismiss.setOnClickListener(v -> {
+            Intent intentService = new Intent(getApplicationContext(), AlarmService.class);
+            getApplicationContext().stopService(intentService);
+            finish();
         });
 
-        snooze.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-            @Override
-            public void onClick(View v) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(System.currentTimeMillis());
-                calendar.add(Calendar.MINUTE, 10);
+        snooze.setOnClickListener(v -> {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            calendar.add(Calendar.MINUTE, 10);
 
-                Alarm alarm = new Alarm(
-                        new Random().nextInt(Integer.MAX_VALUE),
-                        calendar.get(Calendar.HOUR_OF_DAY),
-                        calendar.get(Calendar.MINUTE),
-                        "Snooze",
-                        System.currentTimeMillis(),
-                        true,
-                        false,
-                        false,
-                        false,
-                        false,
-                        false,
-                        false,
-                        false,
-                        false
-                );
+            Observation observation = new Observation(
+                    new Random().nextInt(Integer.MAX_VALUE),
+                    calendar.get(Calendar.HOUR_OF_DAY),
+                    calendar.get(Calendar.MINUTE),
+                    "Snooze",
+                    System.currentTimeMillis(),
+                    true,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    0
+            );
 
-                alarm.schedule(getApplicationContext());
+            observation.schedule(getApplicationContext());
 
-                Intent intentService = new Intent(getApplicationContext(), AlarmService.class);
-                getApplicationContext().stopService(intentService);
-                finish();
-            }
+            Intent intentService = new Intent(getApplicationContext(), AlarmService.class);
+            getApplicationContext().stopService(intentService);
+            finish();
         });
 
         animateClock();

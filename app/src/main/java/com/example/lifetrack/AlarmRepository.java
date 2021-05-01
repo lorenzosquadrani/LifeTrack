@@ -8,7 +8,7 @@ import java.util.List;
 
 public class AlarmRepository {
     private AlarmDao alarmDao;
-    private LiveData<List<Alarm>> alarmsLiveData;
+    private LiveData<List<Observation>> alarmsLiveData;
 
     public AlarmRepository(Application application) {
         AlarmDatabase db = AlarmDatabase.getDatabase(application);
@@ -16,19 +16,19 @@ public class AlarmRepository {
         alarmsLiveData = alarmDao.getAlarms();
     }
 
-    public void insert(Alarm alarm) {
+    public void insert(Observation observation) {
         AlarmDatabase.databaseWriteExecutor.execute(() -> {
-            alarmDao.insert(alarm);
+            alarmDao.insert(observation);
         });
     }
 
-    public void update(Alarm alarm) {
+    public void update(Observation observation) {
         AlarmDatabase.databaseWriteExecutor.execute(() -> {
-            alarmDao.update(alarm);
+            alarmDao.update(observation);
         });
     }
 
-    public LiveData<List<Alarm>> getAlarmsLiveData() {
+    public LiveData<List<Observation>> getAlarmsLiveData() {
         return alarmsLiveData;
     }
 }

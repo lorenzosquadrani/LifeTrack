@@ -31,7 +31,6 @@ public class CreateObsFragment extends Fragment {
     @BindView(R.id.fragment_createobs_editTextTime) TimePicker timePicker;
     @BindView(R.id.fragment_newobs_choosename) EditText title;
     @BindView(R.id.fragment_createalarm_scheduleAlarm) Button scheduleAlarm;
-    @BindView(R.id.fragment_createalarm_recurring) CheckBox recurring;
     @BindView(R.id.fragment_createalarm_checkMon) CheckBox mon;
     @BindView(R.id.fragment_createalarm_checkTue) CheckBox tue;
     @BindView(R.id.fragment_createalarm_checkWed) CheckBox wed;
@@ -40,13 +39,15 @@ public class CreateObsFragment extends Fragment {
     @BindView(R.id.fragment_createalarm_checkSat) CheckBox sat;
     @BindView(R.id.fragment_createalarm_checkSun) CheckBox sun;
     @BindView(R.id.fragment_createalarm_recurring_options) LinearLayout recurringOptions;
+    @BindView((R.id.fragment_CreateObs_datatypespinner)) Spinner datatype;
 
-    private CreateAlarmViewModel createAlarmViewModel;
+
+    private CreateObsViewModel createObsViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        createAlarmViewModel = ViewModelProviders.of(this).get(CreateAlarmViewModel.class);
+        createObsViewModel = ViewModelProviders.of(this).get(CreateObsViewModel.class);
     }
 
     @Nullable
@@ -58,17 +59,6 @@ public class CreateObsFragment extends Fragment {
 
         timePicker.setIs24HourView(DateFormat.is24HourFormat(getContext()));
 
-        recurring.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    recurringOptions.setVisibility(View.VISIBLE);
-                } else {
-                    recurringOptions.setVisibility(View.GONE);
-                }
-            }
-        });
-
         scheduleAlarm.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
@@ -78,7 +68,7 @@ public class CreateObsFragment extends Fragment {
             }
         });
 
-        Spinner spinner = (Spinner) view.findViewById(R.id.fragment_CreateObs_spinner);
+        Spinner spinner = (Spinner) view.findViewById(R.id.fragment_CreateObs_datatypespinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
                R.array.datatype_array, android.R.layout.simple_spinner_item);
@@ -94,25 +84,24 @@ public class CreateObsFragment extends Fragment {
     private void scheduleAlarm() {
         int alarmId = new Random().nextInt(Integer.MAX_VALUE);
 
-        Alarm alarm = new Alarm(
+        Observation observation = new Observation(
                 alarmId,
                 TimePickerUtil.getTimePickerHour(timePicker),
                 TimePickerUtil.getTimePickerMinute(timePicker),
                 title.getText().toString(),
                 System.currentTimeMillis(),
                 true,
-                recurring.isChecked(),
                 mon.isChecked(),
                 tue.isChecked(),
                 wed.isChecked(),
                 thu.isChecked(),
                 fri.isChecked(),
                 sat.isChecked(),
-                sun.isChecked()
+                sun.isChecked(),
+                datatype.getSelectedItemPosition()
         );
 
-        createAlarmViewModel.insert(alarm);
-
-        alarm.schedule(getContext());
+        createObsViewModel.insert(observation);
+        observation.schedule(getContext());
     }
 }
